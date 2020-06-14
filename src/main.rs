@@ -23,6 +23,9 @@ fn main() -> Result<(), Box<dyn Error>> {
             app::list_brands()?;
         }
     }
+    else {
+        println!("{}", matches.usage());
+    }
 
     Ok(())
 }

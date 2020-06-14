@@ -1,4 +1,5 @@
 use std::error::Error;
+use colored::*;
 use crate::log::Log;
 
 mod data;
@@ -14,13 +15,19 @@ pub fn list_brands() -> Result<(), Box<dyn Error>> {
     let manufacturers = loader::load_manufacturers()?;
 
     if let Some(manufacturers) = manufacturers {
-        Log::print_ok(format!("Found {} brand(s)!\n", manufacturers.len()));
-        
+        let mut i = 1;
+
+        Log::print_ok(format!("Found {} brand(s)!", manufacturers.len()));
+        println!();
+
         for brand in &manufacturers {
-            println!("---- {} - {} model(s)", brand.name(), brand.count());
+            println!("{}. {} - {} model(s)", i, brand.name().bold(), brand.count());
+            
+            i += 1;
         }
         
-        Log::print_ok(format!("\nFound {} brand(s)!", manufacturers.len()));
+        println!();
+        Log::print_ok(format!("Found {} brand(s)!", manufacturers.len()));
     }
     else {
         Log::print_error(format!("Found 0 brand(s)!"));
@@ -40,11 +47,7 @@ pub fn list_models_for(brand: &str) -> Result<(), Box<dyn Error>> {
             if brand.to_lowercase() == manufacturer.name().to_lowercase() {
                 found = true;
 
-                Log::print_ok(format!("Found {} model(s)!\n", manufacturer.count()));
-                
                 println!("{}", manufacturer);
-
-                Log::print_ok(format!("\nFound {} model(s)!", manufacturer.count()));
                 
                 break;
             }
@@ -67,11 +70,7 @@ pub fn list_models_for_all() -> Result<(), Box<dyn Error>> {
     
     if let Some(manufacturers) = manufacturers {
         for manufacturer in &manufacturers {
-            Log::print_ok(format!("Found {} model(s)!\n", manufacturer.count()));
-            
             println!("{}", manufacturer);
-
-            Log::print_ok(format!("\nFound {} model(s)!\n", manufacturer.count()));
         }
     }
     else {

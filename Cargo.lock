@@ -621,7 +621,7 @@ dependencies = [
 
 [[package]]
 name = "odin"
-version = "0.1.0"
+version = "1.0.1"
 dependencies = [
  "clap",
  "colored",
@@ -629,6 +629,7 @@ dependencies = [
  "scraper",
  "serde",
  "serde_json",
+ "term_size",
 ]
 
 [[package]]
@@ -1133,6 +1134,16 @@ dependencies = [
  "futf",
  "mac",
  "utf-8",
+]
+
+[[package]]
+name = "term_size"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1e4129646ca0ed8f45d09b929036bafad5377103edd06e50bf574b353d2b08d9"
+dependencies = [
+ "libc",
+ "winapi 0.3.8",
 ]
 
 [[package]]

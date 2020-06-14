@@ -16,7 +16,7 @@ use clap::{self, Arg, App, SubCommand, ArgMatches};
 ///     `odin list --help`
 pub fn parse_args() -> ArgMatches<'static> {
     let matches = App::new("ODIN - OpenWrt Device Information")
-        .version("1.0")
+        .version("1.0.1")
         .author("Meenakshi Sundaram V <vms20591@riseup.net>")
         .about("CLI for OpenWrt's supported devices page")
         .subcommand(

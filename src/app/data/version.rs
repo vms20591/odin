@@ -15,6 +15,7 @@ impl Version {
         Self(version, link)
     }
 
+    #[allow(dead_code)]
     pub fn version(&self) -> &String {
         &self.0
     }
