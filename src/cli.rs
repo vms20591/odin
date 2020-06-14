@@ -1,5 +1,19 @@
 use clap::{self, Arg, App, SubCommand, ArgMatches};
 
+/// # Setup CLI interface for ODIN and parses arguments
+/// 
+/// ## Usage
+/// 
+/// 1. List all brand names
+///     `odin list`
+/// 2. List all models for given brand
+///     `odin list -m -b tp-link`
+/// 3. List all models for all available brands
+///     `odin list`
+/// 4. Global help
+///     `odin --help`
+/// 5. Subcommand help
+///     `odin list --help`
 pub fn parse_args() -> ArgMatches<'static> {
     let matches = App::new("ODIN - OpenWrt Device Information")
         .version("1.0")
