@@ -48,6 +48,10 @@ pub fn parse_args() -> ArgMatches<'static> {
                         .help("Lists all available model detals for all router brands.\nOverrides -n/--name option.\nEffective only with -m/--models option.")
                 )
         )
+        .subcommand(
+            SubCommand::with_name("init")
+                .about("Initialize odin app")
+        )
         .get_matches();
 
         matches

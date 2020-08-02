@@ -25,6 +25,9 @@ fn main() -> Result<(), Box<dyn Error>> {
             application.list_brands()?;
         }
     }
+    else if let Some(_) = matches.subcommand_matches("init") {
+        application.init();
+    }
     else {
         println!("{}", matches.usage());
     }

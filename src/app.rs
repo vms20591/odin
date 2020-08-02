@@ -19,14 +19,16 @@ pub struct App<'f> {
 }
 
 impl<'f> App<'f> {
-    fn init() {
+    pub fn init(&self) {
         let _ = fs::create_dir_all(shellexpand::tilde(ODIN_HOME).trim());
     }
 
     pub fn new(file: Option<&'f str>) -> Self {
-        App::init();
+        let application = Self { file };
+        
+        application.init();
 
-        Self { file }
+        application
     }
 
     /// Lists all brand names

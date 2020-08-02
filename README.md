@@ -27,7 +27,11 @@ cargo build
 
 ### App is slow
 
-The primary reason the results are displayed with huge delay is accessing the devices page from OpenWrt server. To speed up the process, you can download the html file for `https://openwrt.org/toh/start` to your system and place it in `~/.config/odin/devices.html`, or pass it as an option to odin.
+The primary reason the results are displayed with huge delay is, accessing the devices page from OpenWrt server. When you use the list command, odin searches for a file called `devices.html` in `~/.config/odin`. If this file present, then that would be used to load the device details, else, a http request is made.
+
+You could have a `cron` job, that would run every hour to download the html content for `https://openwrt.org/toh/start` to the said location above.
+
+Optionally, while running the `list` command, you could also pass the file path with `-f` or `--file`, which would take precedence over `~/.config/odin/devices.html`.
 
 **Example:** `cargo run -- -f ~/openwrt-devices.html list -m -b netgear`
 
