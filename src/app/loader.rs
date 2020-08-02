@@ -1,13 +1,15 @@
 use std::collections::HashMap;
 use std::error::Error;
+use std::fs;
 use scraper::{Html, Selector};
 use reqwest::{self, blocking, Url};
+use shellexpand;
 
-use super::{OPENWRT_ROOT_PAGE, ALL_DEVICES_PAGE, Model, Manufacturer, Version};
+use super::{OPENWRT_ROOT_PAGE, ALL_DEVICES_PAGE, ODIN_DEVICE_PAGE, Model, Manufacturer, Version};
 use super::Log;
 
 /// Loads html content from OpenWrt's `supported devices` page
-fn fetch_device_content() -> Result<Option<String>, Box<dyn Error>> {
+fn load_html_content_from_http() -> Result<Option<String>, Box<dyn Error>> {
     let client = blocking::Client::new();
     let response = client.get(Url::parse(ALL_DEVICES_PAGE)?)
         .send()?;
@@ -23,13 +25,34 @@ fn fetch_device_content() -> Result<Option<String>, Box<dyn Error>> {
     Ok(Some(response_content))
 }
 
+fn load_html_content_from_file(file: &str) -> Option<String> {
+    // we don't care about file errors
+    match fs::read_to_string(shellexpand::tilde(file).trim()) {
+        Ok(html_content) => Some(html_content),
+        Err(_) => None
+    }
+}
+
 /// Loads all brand details by fetching html content from OpenWrt's `supported` page
 /// This can be used when network connection is fast & there aren't any network issues
-pub fn load_manufacturers() -> Result<Option<Vec<Manufacturer>>, Box<dyn Error>> {
-    let html_content = match fetch_device_content()? {
-        Some(html_content) => html_content,
-        None => {
-            return Ok(None);
+pub fn load_manufacturers(file: Option<&str>) -> Result<Option<Vec<Manufacturer>>, Box<dyn Error>> {
+    let file = file.unwrap_or(ODIN_DEVICE_PAGE);
+
+    // try loading content from user given file or one from odin home (if available)
+    let html_content = if let Some(html_content) = load_html_content_from_file(file) {
+        println!("Loaded content from file: {0}", file);
+        
+        html_content
+    }
+    // do it the hard way, http!
+    else {
+        println!("Loading content from web");
+
+        match load_html_content_from_http()? {
+            Some(html_content) => html_content,
+            None => {
+                return Ok(None);
+            }
         }
     };
 
@@ -40,7 +63,7 @@ pub fn load_manufacturers() -> Result<Option<Vec<Manufacturer>>, Box<dyn Error>>
 /// This would be ideal in case where you already have device details stored as html, and
 /// it could just be loaded from file & passed
 /// Doesn't suffer from any network issues
-pub fn load_manufacturers_from(html_content: &str) -> Result<Option<Vec<Manufacturer>>, Box<dyn Error>> {
+fn load_manufacturers_from(html_content: &str) -> Result<Option<Vec<Manufacturer>>, Box<dyn Error>> {
     let mut manufacturers: Vec<Manufacturer> = Vec::new();
     let mut manufacturer_models_map: HashMap<String, Vec<Model>> = HashMap::new();
     let document = Html::parse_document(&html_content);

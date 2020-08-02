@@ -19,6 +19,12 @@ pub fn parse_args() -> ArgMatches<'static> {
         .version("1.0.1")
         .author("Meenakshi Sundaram V <vms20591@riseup.net>")
         .about("CLI for OpenWrt's supported devices page")
+        .arg(
+            Arg::with_name("file")
+                .short("f")
+                .help("Path to OpenWrt supported device html page, since loading the page via http is slower.")
+                .takes_value(true)
+        )
         .subcommand(
             SubCommand::with_name("list")
                 .about("Lists all available router brands")

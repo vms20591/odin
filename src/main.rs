@@ -6,21 +6,23 @@ mod app;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let matches = cli::parse_args();
+    let file = matches.value_of("file");
+    let application = app::App::new(file);
 
     if let Some(matches) = matches.subcommand_matches("list") {
         if matches.is_present("models") {
             if matches.is_present("all") {
-                app::list_models_for_all()?;
+                application.list_models_for_all()?;
             }
             else if let Some(brand) = matches.value_of("brand") {
-                app::list_models_for(brand)?;
+                application.list_models_for(brand)?;
             }
             else {
                 println!("{}", matches.usage());
             }
         }
         else {
-            app::list_brands()?;
+            application.list_brands()?;
         }
     }
     else {

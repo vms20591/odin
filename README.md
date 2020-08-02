@@ -19,11 +19,19 @@ cargo build
 
 ## Usage
 
-1. List all brand names - `cargo run list`
-2. List all models for a brand - `cargo run list -m -b <brand>`
-3. List all models for all brands - `cargo run list -m -a`
+1. List all brand names - `cargo run -- list`
+2. List all models for a brand - `cargo run -- list -m -b <brand>`
+3. List all models for all brands - `cargo run -- list -m -a`
 
 **Note:** See `cargo run -- --help` or `cargo run list --help` for more details.
+
+### App is slow
+
+The primary reason the results are displayed with huge delay is accessing the devices page from OpenWrt server. To speed up the process, you can download the html file for `https://openwrt.org/toh/start` to your system and place it in `~/.config/odin/devices.html`, or pass it as an option to odin.
+
+**Example:** `cargo run -- -f ~/openwrt-devices.html list -m -b netgear`
+
+This would try to load the content from given file, if it doesn't exist then it would try `~/.config/odin/devices.html` and if that fails, then it loads the content via http.
 
 ## Sample Output
 
